@@ -1,0 +1,1441 @@
+/* 
+CreateAndFillDatabase_LibraryDB
+
+Author: Lily Zimmermann
+Created: Fall 2022
+Notes:
+This file contains the code to create & fill the entities for a Library Database
+*/
+
+
+/*TABLE OF CONTENTS*/
+/*
+DATABASE CODE
+_______CREATE TABLES WITHOUT FOREIGN KEYS_______
+* Create Gender Table
+* Create Department Table
+* Create State Table
+* Create Country Table
+* Create System Permission Table
+* Create Alert Table
+* Create Content Rating Table
+* Create Media Type Table
+* Create Transaction Type Table
+* Create Band Table
+
+_______INSERT DATA INTO TABLES WITHOUT FOREIGN KEYS_______
+* Insert Data into Gender Lookup Table
+* Insert Data into Department Lookup Table
+* Insert Data into State Lookup Table
+* Insert Data into Country Lookup Table
+* Insert Data into SystemPermission Lookup Table
+* Insert Data into Alert Table
+* Insert Data into Content Rating Lookup Table
+* Insert Data into Media Type Table
+* Insert Data into Transaction Type Table
+* Insert Data into Band Table
+
+_______CREATE ADDITIONAL TABLES_______
+* Create Creator Table
+* Create User table
+* Create Schedule table
+* Create Item Table
+* Create Service Table
+* Create Media Table
+* Create Room Table
+* Create Tech Table
+* Create Room Reservation Table
+* Create Tech Reservation Table
+* Create Receipt Table
+* Create Receipt Transaction
+
+_______CREATE LINKING TABLES_______
+* Create User Alert Table
+* Create Media Creator Table
+* Create Media Band Table
+
+_______INSERT DATA INTO ADDITIONAL TABLES_______
+* Insert Data into Creator Table
+* Insert Data into User table
+* Insert Data into Schedule table
+* Insert Data into Item Table
+* Insert Data into Service Table
+* Insert Data into Media Table
+* Insert Data into Room Table
+* Insert Data into Tech Table
+* Insert Data into Room Reservation Table
+* Insert Data into Tech Reservation Table
+* Insert Data into Receipt Table
+* Insert Data into Receipt Transaction
+
+_______INSERT INTO LINKING TABLES_______
+* Insert Data into User Alert Table
+* Insert Data into Media Creator table
+* Insert Data into Media Band table
+
+ADDITIONAL CODE
+_______DELETE DATA_______
+* Delete Data from Linking Entities
+* Delete Data from Additional Entities
+* Delete Data from Entities Without Foreign Keys
+
+_______DELETE TABLES_______
+* Delete Linking Tables
+* Delete Additional Tables
+* Delete Tables Without Foreign Keys
+
+_______PRINT DATA_______
+* Print all data from linking tables
+* Print all data from additional tables
+* Print all data from tables without foreign keys
+
+_______OTHER CODE_______
+* Check if Table is Present
+*/
+/*DATABASE CODE*/
+/*CREATE TABLES WITHOUT FOREIGN KEYS*/
+/*Create Gender Table*/
+CREATE TABLE Gender(
+GenderID NCHAR(7) NOT NULL,
+GenderDescription NVARCHAR(100) NOT NULL,
+PRIMARY KEY(GenderID),
+);
+
+/*Create Department Table*/
+CREATE TABLE Department (
+DepartmentID NCHAR(8) NOT NULL,
+DepartmentDescription NVARCHAR(50) NOT NULL,
+PRIMARY KEY(DepartmentID),
+);
+
+/*Create State Table*/
+CREATE TABLE State (
+StateID NCHAR(5) NOT NULL,
+StateDescription NVARCHAR(50) NOT NULL,
+PRIMARY KEY(StateID),
+);
+
+/*Create Country Table*/
+CREATE TABLE Country (
+CountryID NCHAR(8) NOT NULL,
+CountryDescription NVARCHAR(100) NOT NULL,
+PRIMARY KEY(CountryID),
+);
+
+/*Create System Permission Table*/
+CREATE TABLE SystemPermission(
+SystemPermissionID NCHAR(14) NOT NULL,
+SystemPermissionDescription NVARCHAR(50) NOT NULL,
+PRIMARY KEY(SystemPermissionID),
+);
+
+/*Create Alert Table*/
+CREATE TABLE Alert (
+AlertID INT NOT NULL IDENTITY,
+AlertDescription NVARCHAR(30) NOT NULL,
+PRIMARY KEY(AlertID),
+);
+
+/*Create Content Rating Table*/
+CREATE TABLE ContentRating (
+ContentRatingID NVARCHAR(50) NOT NULL,
+ContentRatingDescription NVARCHAR(200) NOT NULL,
+ContentRatingMinAge TINYINT NOT NULL,
+PRIMARY KEY(ContentRatingID),
+CHECK (ContentRatingMinAge >= 0 AND ContentRatingMinAge <=100),
+);
+
+/*Create MediaType Table*/
+CREATE TABLE MediaType(
+MediaTypeID NCHAR(9) NOT NULL,
+MediaTypeName NVARCHAR(50) NOT NULL,
+MediaTypeDigital BIT NOT NULL,
+MediaTypeAudio BIT NOT NULL,
+PRIMARY KEY(MediaTypeID),
+);
+
+/*Create Transaction Type Table*/
+CREATE TABLE TransactionType (
+TransactionTypeID NCHAR(9) NOT NULL,
+TransactionTypeDescription NVARCHAR(50) NOT NULL,
+TransactionTypePaymentInvolved BIT NOT NULL,
+TransactionTypeFee BIT NOT NULL,
+TransactionTypeReservation BIT NOT NULL,
+PRIMARY KEY(TransactionTypeID),
+);
+
+/*Create Loan Type Table*/
+CREATE TABLE LoanType (
+LoanTypeID NCHAR(12) NOT NULL, -- LOANTYPE-001
+LoanTypeDescription NVARCHAR(50) NOT NULL,
+LoanTypeTotalDaysPerLoan INT NOT NULL,
+LoanTypeMaxNumOfLoanRenewals INT NOT NULL,
+LoanTypeMaxLatePeriodDays INT NOT NULL,
+LoanTypeDailyLateFee SMALLMONEY NOT NULL,
+PRIMARY KEY(LoanTypeID),
+CHECK (LoanTypeTotalDaysPerLoan >= 0 AND LoanTypeTotalDaysPerLoan <=30),
+CHECK (LoanTypeMaxNumOfLoanRenewals >= 0 AND LoanTypeMaxNumOfLoanRenewals <=3),
+CHECK (LoanTypeMaxLatePeriodDays >= 0 AND LoanTypeMaxLatePeriodDays <=30),
+CHECK (LoanTypeDailyLateFee >= 0.00 AND LoanTypeDailyLateFee <= 5.00),
+);
+
+/*Create Band Table*/
+CREATE TABLE Band(
+BandID BIGINT NOT NULL IDENTITY,
+BandName NVARCHAR(70) NOT NULL,
+PRIMARY KEY(BandID),
+);
+
+/*Create Tech Type Table*/
+CREATE TABLE TechType(
+TechTypeID INT NOT NULL IDENTITY,
+TechTypeDescription NVARCHAR(50) NOT NULL, 
+PRIMARY KEY(TechTypeID),
+);
+/*INSERT DATA INTO TABLES WITHOUT FOREIGN KEYS*/
+/*Insert Data into Gender Table*/
+INSERT INTO Gender VALUES('GEN-001', 'Female');
+INSERT INTO Gender VALUES('GEN-002', 'Male');
+INSERT INTO Gender VALUES('GEN-003', 'Gender Fluid');
+INSERT INTO Gender VALUES('GEN-004', 'Bigender');
+INSERT INTO Gender VALUES('GEN-005', 'Gender Non-Conforming');
+INSERT INTO Gender VALUES('GEN-006', 'Third Sex');
+INSERT INTO Gender VALUES('GEN-007', 'Two Spirit');
+INSERT INTO Gender VALUES('GEN-008', 'Genderqueer');
+INSERT INTO Gender VALUES('GEN-009', 'Agender');
+INSERT INTO Gender VALUES('GEN-010', 'Transgender');
+INSERT INTO Gender VALUES('GEN-011', 'Intersex');
+
+/*Insert Data into Department Table*/
+INSERT INTO Department VALUES('DEPT-001', 'Front Desk');
+INSERT INTO Department VALUES('DEPT-002', 'Security');
+INSERT INTO Department VALUES('DEPT-003', 'Cataloging');
+INSERT INTO Department VALUES('DEPT-004', 'Circulation/Access Services');
+INSERT INTO Department VALUES('DEPT-005', 'Collection Development/Acquisitions');
+INSERT INTO Department VALUES('DEPT-006', 'Digital Collections');
+INSERT INTO Department VALUES('DEPT-007', 'Geographic Information System');
+INSERT INTO Department VALUES('DEPT-008', 'Government Documents');
+INSERT INTO Department VALUES('DEPT-009', 'Interlibrary Loan/Resource Sharing');
+INSERT INTO Department VALUES('DEPT-010', 'Special Collections/Archives');
+INSERT INTO Department VALUES('DEPT-011', 'Sound and Image');
+INSERT INTO Department VALUES('DEPT-012', 'Systems');
+INSERT INTO Department VALUES('DEPT-013', 'Accounting');
+INSERT INTO Department VALUES('DEPT-014', 'Human Resources');
+INSERT INTO Department VALUES('DEPT-015', 'Information Technology');
+INSERT INTO Department VALUES('DEPT-016', 'Administration');
+INSERT INTO Department VALUES('DEPT-017', 'Custodial Services');
+INSERT INTO Department VALUES('DEPT-018', 'Groundskeeping');
+
+/*Insert Data into State Table*/
+INSERT INTO "State" VALUES('ST-AL', 'Alabama');
+INSERT INTO "State" VALUES('ST-AK', 'Alaska');
+INSERT INTO "State" VALUES('ST-AZ', 'Arizona');
+INSERT INTO "State" VALUES('ST-AR', 'Arkansas');
+INSERT INTO "State" VALUES('ST-CA', 'California');
+INSERT INTO "State" VALUES('ST-CO', 'Colorado');
+INSERT INTO "State" VALUES('ST-CT', 'Connecticut');
+INSERT INTO "State" VALUES('ST-DE', 'Delaware');
+INSERT INTO "State" VALUES('ST-FL', 'Florida');
+INSERT INTO "State" VALUES('ST-GA', 'Georgia');
+INSERT INTO "State" VALUES('ST-HI', 'Hawaii');
+INSERT INTO "State" VALUES('ST-ID', 'Idaho');
+INSERT INTO "State" VALUES('ST-IL', 'Illinois');
+INSERT INTO "State" VALUES('ST-IN', 'Indiana');
+INSERT INTO "State" VALUES('ST-IA', 'Iowa');
+INSERT INTO "State" VALUES('ST-KS', 'Kansas');
+INSERT INTO "State" VALUES('ST-KY', 'Kentucky');
+INSERT INTO "State" VALUES('ST-LA', 'Louisiana');
+INSERT INTO "State" VALUES('ST-ME', 'Maine');
+INSERT INTO "State" VALUES('ST-MD', 'Maryland');
+INSERT INTO "State" VALUES('ST-MA', 'Massachusetts');
+INSERT INTO "State" VALUES('ST-MI', 'Michigan');
+INSERT INTO "State" VALUES('ST-MN', 'Minnesota');
+INSERT INTO "State" VALUES('ST-MS', 'Mississippi');
+INSERT INTO "State" VALUES('ST-MO', 'Missouri');
+INSERT INTO "State" VALUES('ST-MT', 'Montana');
+INSERT INTO "State" VALUES('ST-NE', 'Nebraska');
+INSERT INTO "State" VALUES('ST-NV', 'Nevada');
+INSERT INTO "State" VALUES('ST-NH', 'New Hampshire');
+INSERT INTO "State" VALUES('ST-NJ', 'New Jersey');
+INSERT INTO "State" VALUES('ST-NM', 'New Mexico');
+INSERT INTO "State" VALUES('ST-NY', 'New York');
+INSERT INTO "State" VALUES('ST-NC', 'North Carolina');
+INSERT INTO "State" VALUES('ST-ND', 'North Dakota');
+INSERT INTO "State" VALUES('ST-OH', 'Ohio');
+INSERT INTO "State" VALUES('ST-OK', 'Oklahoma');
+INSERT INTO "State" VALUES('ST-OR', 'Oregon');
+INSERT INTO "State" VALUES('ST-PA', 'Pennsylvania');
+INSERT INTO "State" VALUES('ST-RI', 'Rhode Island');
+INSERT INTO "State" VALUES('ST-SC', 'South Carolina');
+INSERT INTO "State" VALUES('ST-SD', 'South Dakota');
+INSERT INTO "State" VALUES('ST-TN', 'Tennessee');
+INSERT INTO "State" VALUES('ST-TX', 'Texas');
+INSERT INTO "State" VALUES('ST-UT', 'Utah');
+INSERT INTO "State" VALUES('ST-VT', 'Vermont');
+INSERT INTO "State" VALUES('ST-VA', 'Virginia');
+INSERT INTO "State" VALUES('ST-WA', 'Washington');
+INSERT INTO "State" VALUES('ST-WV', 'West Virginia');
+INSERT INTO "State" VALUES('ST-WI', 'Wisconsin');
+INSERT INTO "State" VALUES('ST-WY', 'Wyoming');
+
+/*Insert Data into Country Table*/
+INSERT INTO Country VALUES('CTRY-DZA', 'Algeria');
+INSERT INTO Country VALUES('CTRY-AGO', 'Angola');
+INSERT INTO Country VALUES('CTRY-BEN', 'Benin');
+INSERT INTO Country VALUES('CTRY-BWA', 'Botswana');
+INSERT INTO Country VALUES('CTRY-BFA', 'Burkina Faso');
+INSERT INTO Country VALUES('CTRY-BDI', 'Burundi');
+INSERT INTO Country VALUES('CTRY-CMR', 'Cameroon');
+INSERT INTO Country VALUES('CTRY-CPV', 'Cape Verde');
+INSERT INTO Country VALUES('CTRY-CAF', 'The Central African Republic');
+INSERT INTO Country VALUES('CTRY-TCD', 'Chad');
+INSERT INTO Country VALUES('CTRY-COM', 'The Comoros');
+INSERT INTO Country VALUES('CTRY-COD', 'Democratic Republic of Congo');
+INSERT INTO Country VALUES('CTRY-CIV', 'Cote dlvoire');
+INSERT INTO Country VALUES('CTRY-DJI', 'Djibouti');
+INSERT INTO Country VALUES('CTRY-EGY', 'Egypt');
+INSERT INTO Country VALUES('CTRY-GNQ', 'Equatorial Guinea');
+INSERT INTO Country VALUES('CTRY-ERI', 'Eritrea');
+INSERT INTO Country VALUES('CTRY-SWZ', 'Eswatini');
+INSERT INTO Country VALUES('CTRY-ETH', 'Ethiopia');
+INSERT INTO Country VALUES('CTRY-GAB', 'Gabon');
+INSERT INTO Country VALUES('CTRY-GMB', 'Gambia');
+INSERT INTO Country VALUES('CTRY-GHA', 'Ghana');
+INSERT INTO Country VALUES('CTRY-GIN', 'Guinea');
+INSERT INTO Country VALUES('CTRY-GNB', 'Guinea-Bissau');
+INSERT INTO Country VALUES('CTRY-KEN', 'Kenya');
+INSERT INTO Country VALUES('CTRY-LSO', 'Lesotho');
+INSERT INTO Country VALUES('CTRY-LBR', 'Liberia');
+INSERT INTO Country VALUES('CTRY-MDG', 'Madagascar');
+INSERT INTO Country VALUES('CTRY-MWI', 'Malawi');
+INSERT INTO Country VALUES('CTRY-MLI', 'Mali');
+INSERT INTO Country VALUES('CTRY-MRT', 'Mauritania');
+INSERT INTO Country VALUES('CTRY-MUS', 'Mauritius');
+INSERT INTO Country VALUES('CTRY-MYT', 'Mayotte');
+INSERT INTO Country VALUES('CTRY-MAR', 'Morocco');
+INSERT INTO Country VALUES('CTRY-MOZ', 'Mozambique');
+INSERT INTO Country VALUES('CTRY-NAM', 'Namibia');
+INSERT INTO Country VALUES('CTRY-NER', 'Niger');
+INSERT INTO Country VALUES('CTRY-NGA', 'Nigeria');
+INSERT INTO Country VALUES('CTRY-REU', 'Reunion');
+INSERT INTO Country VALUES('CTRY-RWA', 'Rwanda');
+INSERT INTO Country VALUES('CTRY-SHN', 'Saint Helena, Ascension and Tristan da Cunha');
+INSERT INTO Country VALUES('CTRY-STP', 'Sao Tome and Principe');
+INSERT INTO Country VALUES('CTRY-SEN', 'Senegal');
+INSERT INTO Country VALUES('CTRY-SYC', 'Seychelles');
+INSERT INTO Country VALUES('CTRY-SLE', 'Sierra Leone');
+INSERT INTO Country VALUES('CTRY-SOM', 'Somalia');
+INSERT INTO Country VALUES('CTRY-ZAF', 'South Africa');
+INSERT INTO Country VALUES('CTRY-SSD', 'South Sudan');
+INSERT INTO Country VALUES('CTRY-SDN', 'The Sudan');
+INSERT INTO Country VALUES('CTRY-TZA', 'Tanzania');
+INSERT INTO Country VALUES('CTRY-TGO', 'Togo');
+INSERT INTO Country VALUES('CTRY-TUN', 'Tunisia');
+INSERT INTO Country VALUES('CTRY-UGA', 'Uganda');
+INSERT INTO Country VALUES('CTRY-ESH', 'Western Sahara');
+INSERT INTO Country VALUES('CTRY-ZMB', 'Zambia');
+INSERT INTO Country VALUES('CTRY-ZWE', 'Zimbabwe');
+INSERT INTO Country VALUES('CTRY-ATA', 'Antarctica');
+INSERT INTO Country VALUES('CTRY-BVT', 'Bouvet Island');
+INSERT INTO Country VALUES('CTRY-ATF', 'French Southern Territories');
+INSERT INTO Country VALUES('CTRY-HMD', 'Heard Island and McDonald Islands');
+INSERT INTO Country VALUES('CTRY-SGS', 'South Georgia and the South Sandwich Islands');
+INSERT INTO Country VALUES('CTRY-ASM', 'American Samoa');
+INSERT INTO Country VALUES('CTRY-AUS', 'Australia');
+INSERT INTO Country VALUES('CTRY-COK', 'Cook Islands');
+INSERT INTO Country VALUES('CTRY-FJI', 'Fiji');
+INSERT INTO Country VALUES('CTRY-PYF', 'French Polynesia');
+INSERT INTO Country VALUES('CTRY-GUM', 'Guam');
+INSERT INTO Country VALUES('CTRY-KIR', 'Kiribati');
+INSERT INTO Country VALUES('CTRY-MHL', 'Marshall Islands');
+INSERT INTO Country VALUES('CTRY-FSM', 'Micronesia');
+INSERT INTO Country VALUES('CTRY-NRU', 'Nauru');
+INSERT INTO Country VALUES('CTRY-NCL', 'New Caledonia');
+INSERT INTO Country VALUES('CTRY-NZL', 'New Zealand');
+INSERT INTO Country VALUES('CTRY-NIU', 'Niue');
+INSERT INTO Country VALUES('CTRY-NFK', 'Norfolk Island');
+INSERT INTO Country VALUES('CTRY-MNP', 'Northern Mariana Islands');
+INSERT INTO Country VALUES('CTRY-PLW', 'Palau');
+INSERT INTO Country VALUES('CTRY-PNG', 'Papua New Guinea');
+INSERT INTO Country VALUES('CTRY-PCN', 'Pitcairn Islands');
+INSERT INTO Country VALUES('CTRY-WSM', 'Samoa');
+INSERT INTO Country VALUES('CTRY-SLB', 'Solomon Islands');
+INSERT INTO Country VALUES('CTRY-TKL', 'Tokelau');
+INSERT INTO Country VALUES('CTRY-TON', 'Kingdom of Tonga');
+INSERT INTO Country VALUES('CTRY-TUV', 'Tuvalu');
+INSERT INTO Country VALUES('CTRY-UMI', 'United States Minor Outlying Islands');
+INSERT INTO Country VALUES('CTRY-VUT', 'Vanuatu');
+INSERT INTO Country VALUES('CTRY-WLF', 'Wallis and Futuna');
+INSERT INTO Country VALUES('CTRY-AFG', 'Afghanistan');
+INSERT INTO Country VALUES('CTRY-AZE', 'Azerbaijan');
+INSERT INTO Country VALUES('CTRY-BHR', 'Bahrain');
+INSERT INTO Country VALUES('CTRY-BGD', 'Bangladesh');
+INSERT INTO Country VALUES('CTRY-BTN', 'Bhutan');
+INSERT INTO Country VALUES('CTRY-IOT', 'British Indian Ocean Territory');
+INSERT INTO Country VALUES('CTRY-BRN', 'Brunei Darussalam');
+INSERT INTO Country VALUES('CTRY-KHM', 'Cambodia');
+INSERT INTO Country VALUES('CTRY-CHN', 'People''s Republic of China');
+INSERT INTO Country VALUES('CTRY-CXR', 'Christmas Island');
+INSERT INTO Country VALUES('CTRY-CCK', 'Cocos (Kelling) Islands');
+INSERT INTO Country VALUES('CTRY-CYP', 'Cyprus');
+INSERT INTO Country VALUES('CTRY-GEO', 'Georgia');
+INSERT INTO Country VALUES('CTRY-HKG', 'Hong Kong');
+INSERT INTO Country VALUES('CTRY-IND', 'India');
+INSERT INTO Country VALUES('CTRY-IDN', 'Indonesia');
+INSERT INTO Country VALUES('CTRY-IRN', 'Islamic Republic of Iran');
+INSERT INTO Country VALUES('CTRY-IRQ', 'Iraq');
+INSERT INTO Country VALUES('CTRY-ISR', 'Israel');
+INSERT INTO Country VALUES('CTRY-JPN', 'Japan');
+INSERT INTO Country VALUES('CTRY-JOR', 'Jordan');
+INSERT INTO Country VALUES('CTRY-KAZ', 'Kazakhstan');
+INSERT INTO Country VALUES('CTRY-PRK', 'Democratic People''s Republic of Korea');
+INSERT INTO Country VALUES('CTRY-KOR', 'Republic of Korea');
+INSERT INTO Country VALUES('CTRY-KWT', 'Kuwait');
+INSERT INTO Country VALUES('CTRY-KGZ', 'Kyrgyzstan');
+INSERT INTO Country VALUES('CTRY-LAO', 'Lao People''s Democratic Republic');
+INSERT INTO Country VALUES('CTRY-LBN', 'Lebanon');
+INSERT INTO Country VALUES('CTRY-MAC', 'Macao');
+INSERT INTO Country VALUES('CTRY-MYS', 'Malaysia');
+INSERT INTO Country VALUES('CTRY-MDV', 'Maldives');
+INSERT INTO Country VALUES('CTRY-MNG', 'Mongolia');
+INSERT INTO Country VALUES('CTRY-MMR', 'Myanmar');
+INSERT INTO Country VALUES('CTRY-NPL', 'Nepal');
+INSERT INTO Country VALUES('CTRY-OMN', 'Oman');
+INSERT INTO Country VALUES('CTRY-PAK', 'Pakistan');
+INSERT INTO Country VALUES('CTRY-PSE', 'Palestinian Territory');
+INSERT INTO Country VALUES('CTRY-PHL', 'Philippines');
+INSERT INTO Country VALUES('CTRY-QAT', 'Qatar');
+INSERT INTO Country VALUES('CTRY-SAU', 'Saudi Arabia');
+INSERT INTO Country VALUES('CTRY-SGP', 'Singapore');
+INSERT INTO Country VALUES('CTRY-LKA', 'Sri Lanka');
+INSERT INTO Country VALUES('CTRY-SYR', 'Syrian Arab Republic');
+INSERT INTO Country VALUES('CTRY-TWN', 'Taiwan');
+INSERT INTO Country VALUES('CTRY-TJK', 'Tajikistan');
+INSERT INTO Country VALUES('CTRY-THA', 'Thailand');
+INSERT INTO Country VALUES('CTRY-TLS', 'Timor-Leste');
+INSERT INTO Country VALUES('CTRY-TUR', 'Turkey');
+INSERT INTO Country VALUES('CTRY-TKM', 'Turkmenistan');
+INSERT INTO Country VALUES('CTRY-ARE', 'United Arab Emirates');
+INSERT INTO Country VALUES('CTRY-UZB', 'Uzbekistan');
+INSERT INTO Country VALUES('CTRY-VNM', 'Vietnam');
+INSERT INTO Country VALUES('CTRY-YEM', 'Yemen');
+INSERT INTO Country VALUES('CTRY-ALA', 'Aland Islands');
+INSERT INTO Country VALUES('CTRY-ALB', 'Albania');
+INSERT INTO Country VALUES('CTRY-AND', 'Andorra');
+INSERT INTO Country VALUES('CTRY-ARM', 'Armenia');
+INSERT INTO Country VALUES('CTRY-AUT', 'Austria');
+INSERT INTO Country VALUES('CTRY-BLR', 'Belarus');
+INSERT INTO Country VALUES('CTRY-BEL', 'Belgium');
+INSERT INTO Country VALUES('CTRY-BIH', 'Bosnia and Herzegovina');
+INSERT INTO Country VALUES('CTRY-BGR', 'Republic of Bulgaria');
+INSERT INTO Country VALUES('CTRY-HRV', 'Croatia');
+INSERT INTO Country VALUES('CTRY-CZE', 'Czech Republic');
+INSERT INTO Country VALUES('CTRY-DNK', 'Denmark');
+INSERT INTO Country VALUES('CTRY-EST', 'Estonia');
+INSERT INTO Country VALUES('CTRY-FRO', 'Faroe Islands');
+INSERT INTO Country VALUES('CTRY-FIN', 'Finland');
+INSERT INTO Country VALUES('CTRY-FRA', 'France');
+INSERT INTO Country VALUES('CTRY-DEU', 'Germany');
+INSERT INTO Country VALUES('CTRY-GIB', 'Gibraltar');
+INSERT INTO Country VALUES('CTRY-GRC', 'Greece');
+INSERT INTO Country VALUES('CTRY-GGY', 'Guernsey');
+INSERT INTO Country VALUES('CTRY-VAT', 'Holy See (Vatican City State)');
+INSERT INTO Country VALUES('CTRY-HUN', 'Hungary');
+INSERT INTO Country VALUES('CTRY-ISL', 'Iceland');
+INSERT INTO Country VALUES('CTRY-IRL', 'Ireland');
+INSERT INTO Country VALUES('CTRY-IMN', 'Isle of Man');
+INSERT INTO Country VALUES('CTRY-ITA', 'Italy');
+INSERT INTO Country VALUES('CTRY-JEY', 'Jersey');
+INSERT INTO Country VALUES('CTRY-LVA', 'Latvia');
+INSERT INTO Country VALUES('CTRY-LIE', 'Liechtenstein');
+INSERT INTO Country VALUES('CTRY-LTU', 'Lithuania');
+INSERT INTO Country VALUES('CTRY-LUX', 'Luxembourg');
+INSERT INTO Country VALUES('CTRY-MKD', 'Republic of North Macedonia');
+INSERT INTO Country VALUES('CTRY-MLT', 'Malta');
+INSERT INTO Country VALUES('CTRY-MDA', 'Moldova');
+INSERT INTO Country VALUES('CTRY-MCO', 'Monaco');
+INSERT INTO Country VALUES('CTRY-MNE', 'Montenegro');
+INSERT INTO Country VALUES('CTRY-NLD', 'Netherlands');
+INSERT INTO Country VALUES('CTRY-NOR', 'Norway');
+INSERT INTO Country VALUES('CTRY-POL', 'Poland');
+INSERT INTO Country VALUES('CTRY-PRT', 'Portugal');
+INSERT INTO Country VALUES('CTRY-ROU', 'Romania');
+INSERT INTO Country VALUES('CTRY-RUS', 'Russian Federation');
+INSERT INTO Country VALUES('CTRY-SMR', 'San Marino');
+INSERT INTO Country VALUES('CTRY-SRB', 'Serbia');
+INSERT INTO Country VALUES('CTRY-SVK', 'Slovakia');
+INSERT INTO Country VALUES('CTRY-SVN', 'Slovenia');
+INSERT INTO Country VALUES('CTRY-ESP', 'Spain');
+INSERT INTO Country VALUES('CTRY-SJM', 'Svalbard and Jan Mayen Islands');
+INSERT INTO Country VALUES('CTRY-SWE', 'Sweden');
+INSERT INTO Country VALUES('CTRY-CHE', 'Switzerland');
+INSERT INTO Country VALUES('CTRY-UKR', 'Ukraine');
+INSERT INTO Country VALUES('CTRY-GBR', 'United Kingdom');
+INSERT INTO Country VALUES('CTRY-AIA', 'Anguilla');
+INSERT INTO Country VALUES('CTRY-ABW', 'Aruba');
+INSERT INTO Country VALUES('CTRY-BES', 'Sint Eustatius and Saba Bonaire');
+INSERT INTO Country VALUES('CTRY-CAN', 'Canada');
+INSERT INTO Country VALUES('CTRY-CUB', 'Cuba');
+INSERT INTO Country VALUES('CTRY-CUW', 'Curacao');
+INSERT INTO Country VALUES('CTRY-DMA', 'Dominica');
+INSERT INTO Country VALUES('CTRY-DOM', 'Dominican Republic');
+INSERT INTO Country VALUES('CTRY-SLV', 'El Salvador');
+INSERT INTO Country VALUES('CTRY-GRL', 'Greenland');
+INSERT INTO Country VALUES('CTRY-GRD', 'Grenada');
+INSERT INTO Country VALUES('CTRY-GLP', 'Guadeloupe');
+INSERT INTO Country VALUES('CTRY-GTM', 'Guatemala');
+INSERT INTO Country VALUES('CTRY-HTI', 'Haiti');
+INSERT INTO Country VALUES('CTRY-HND', 'Honduras');
+INSERT INTO Country VALUES('CTRY-JAM', 'Jamaica');
+INSERT INTO Country VALUES('CTRY-MTQ', 'Martinique');
+INSERT INTO Country VALUES('CTRY-MEX', 'Mexico');
+INSERT INTO Country VALUES('CTRY-MSR', 'Montserrat');
+INSERT INTO Country VALUES('CTRY-ANT', 'Netherlands Antilles');
+INSERT INTO Country VALUES('CTRY-NIC', 'Nicaragua');
+INSERT INTO Country VALUES('CTRY-PAN', 'Panama');
+INSERT INTO Country VALUES('CTRY-PRI', 'Puerto Rico');
+INSERT INTO Country VALUES('CTRY-BLM', 'Saint Barthelemy');
+INSERT INTO Country VALUES('CTRY-KNA', 'Saint Kitts and Nevis');
+INSERT INTO Country VALUES('CTRY-LCA', 'Saint Lucia');
+INSERT INTO Country VALUES('CTRY-MAF', 'Saint Martin');
+INSERT INTO Country VALUES('CTRY-SPM', 'Saint Pierre and Miquelon');
+INSERT INTO Country VALUES('CTRY-VCT', 'Saint Vincent and the Grenadines');
+INSERT INTO Country VALUES('CTRY-SXM', 'Sint Maarten (Netherlands)');
+INSERT INTO Country VALUES('CTRY-TTO', 'Trinidad and Tobago');
+INSERT INTO Country VALUES('CTRY-TCA', 'Turks and Caicos Islands');
+INSERT INTO Country VALUES('CTRY-USA', 'United States of America');
+INSERT INTO Country VALUES('CTRY-VIR', 'United States Virgin Islands');
+INSERT INTO Country VALUES('CTRY-ARG', 'Argentina');
+INSERT INTO Country VALUES('CTRY-BOL', 'Bolivia');
+INSERT INTO Country VALUES('CTRY-BRA', 'Brazil');
+INSERT INTO Country VALUES('CTRY-CHL', 'Chile');
+INSERT INTO Country VALUES('CTRY-COL', 'Colombia');
+INSERT INTO Country VALUES('CTRY-ECU', 'Ecuador');
+INSERT INTO Country VALUES('CTRY-FLK', 'Falkland Islands (Malvinas)');
+INSERT INTO Country VALUES('CTRY-GUF', 'French Guiana');
+INSERT INTO Country VALUES('CTRY-GUY', 'Guyana');
+INSERT INTO Country VALUES('CTRY-PRY', 'Paraguay');
+INSERT INTO Country VALUES('CTRY-PER', 'Peru');
+INSERT INTO Country VALUES('CTRY-SUR', 'Suriname');
+INSERT INTO Country VALUES('CTRY-URY', 'Uruguay');
+INSERT INTO Country VALUES('CTRY-VEN', 'Venezuela');
+
+/*Insert Data into System Permission Table*/
+INSERT INTO SystemPermission VALUES ('Permission-001', 'Customer');
+INSERT INTO SystemPermission VALUES('Permission-002', 'Front Desk');
+INSERT INTO SystemPermission VALUES('Permission-003', 'Manager');
+INSERT INTO SystemPermission VALUES('Permission-004', 'Accounting');
+INSERT INTO SystemPermission VALUES('Permission-005', 'Librarian');
+INSERT INTO SystemPermission VALUES('Permission-006', 'System Administrator');
+INSERT INTO SystemPermission VALUES('Permission-007', 'Cataloging');
+INSERT INTO SystemPermission VALUES('Permission-008', 'Circulation/Access Services');
+INSERT INTO SystemPermission VALUES('Permission-009', 'Collection');
+INSERT INTO SystemPermission VALUES('Permission-010', 'Digital Collections');
+
+/*Insert Data into Alert Table*/
+INSERT INTO Alert VALUES ('Ban-Violence');
+INSERT INTO Alert VALUES ('Ban-Property Damage');
+INSERT INTO Alert VALUES ('Ban-Funds > $10,000 due');
+INSERT INTO Alert VALUES ('Ban-Disorderly Conduct');
+INSERT INTO Alert VALUES ('Ban-Theft');
+INSERT INTO Alert VALUES ('Hold-Funds Due');
+INSERT INTO Alert VALUES ('Hold-Late Returns');
+INSERT INTO Alert VALUES ('Hold-Verify Contact Info');
+INSERT INTO Alert VALUES ('Hold-Maximum Loans Met');
+INSERT INTO Alert VALUES ('Potential Duplicate Account');
+
+/*Insert Data into Content Rating Table*/
+INSERT INTO ContentRating VALUES ('CONT-RATE-BOOK-Y', 'Youth', '0');
+INSERT INTO ContentRating VALUES ('CONT-RATE-BOOK-YA', 'Young Adult', '10');
+INSERT INTO ContentRating VALUES ('CONT-RATE-BOOK-T', 'Teen', '13');
+INSERT INTO ContentRating VALUES ('CONT-RATE-BOOK-A', 'Adult', '18');
+INSERT INTO ContentRating VALUES ('CONT-RATE-BOOK-E', 'Explicit', '21');
+INSERT INTO ContentRating VALUES ('CONT-RATE-VIDEOGAME-E', 'Everyone', '0');
+INSERT INTO ContentRating VALUES ('CONT-RATE-VIDEOGAME-E10+', 'Everyone 10+', '');
+INSERT INTO ContentRating VALUES ('CONT-RATE-VIDEOGAME-T', 'Teen', '13');
+INSERT INTO ContentRating VALUES ('CONT-RATE-VIDEOGAME-M', 'Mature 17+', '17');
+INSERT INTO ContentRating VALUES ('CONT-RATE-VIDEOGAME-A', 'Adults only 18+', '18');
+INSERT INTO ContentRating VALUES ('CONT-RATE-VIDEOGAME-RP', 'Rating Pending', '18');
+INSERT INTO ContentRating VALUES ('CONT-RATE-VIDEOGAME-RP17+', 'Rating Pending Likely Mature 17+', '17');
+INSERT INTO ContentRating VALUES ('CONT-RATE-TV-Y', 'This program is designed to be appropriate for all children', '0');
+INSERT INTO ContentRating VALUES ('CONT-RATE-TV-Y7', 'This program is designed for children age 7 and above', '7');
+INSERT INTO ContentRating VALUES ('CONT-RATE-TV-G', 'Most parents will find this program suitable for all ages.', '0');
+INSERT INTO ContentRating VALUES ('CONT-RATE-TV-PG', 'This program contains material that parents may find unsuitable for younger children', '0');
+INSERT INTO ContentRating VALUES ('CONT-RATE-TV-14', 'This program contains material that most parents would find unsuitable for children under 14 years of age', '14');
+INSERT INTO ContentRating VALUES ('CONT-RATE-TV-MA', 'This program is specifically designed to be viewed by adults and therefore may be unsuitable for children under 17', '17');
+INSERT INTO ContentRating VALUES ('CONT-RATE-MUSIC-PAL', 'Parental Advisory', '16');
+INSERT INTO ContentRating VALUES ('CONT-RATE-MUSIC-NONPAL', 'Not Parental Advisory', '0');
+INSERT INTO ContentRating VALUES ('CONT-RATE-FILM-G', 'General Audiences', '0');
+INSERT INTO ContentRating VALUES ('CONT-RATE-FILM-PG', 'Parental Guidance Suggested', '0');
+INSERT INTO ContentRating VALUES ('CONT-RATE-FILM-PG13', 'Parents Strongly Cautioned', '13');
+INSERT INTO ContentRating VALUES ('CONT-RATE-FILM-R', 'Restricted', '18');
+INSERT INTO ContentRating VALUES ('CONT-RATE-FILM-NC17', 'Adults only', '18');
+INSERT INTO ContentRating VALUES ('CONT-RATE-COMICS-E', 'Everyone', '0');
+INSERT INTO ContentRating VALUES ('CONT-RATE-COMICS-T', 'Teen', '12');
+INSERT INTO ContentRating VALUES ('CONT-RATE-COMICS-13+', '13 and up', '13');
+INSERT INTO ContentRating VALUES ('CONT-RATE-COMICS-T+', 'Teen Plus', '15');
+INSERT INTO ContentRating VALUES ('CONT-RATE-COMICS-15+', '15 and up', '15');
+INSERT INTO ContentRating VALUES ('CONT-RATE-COMICS-M', 'Mature', '17');
+INSERT INTO ContentRating VALUES ('CONT-RATE-COMICS-17+', '17 and up', '17');
+INSERT INTO ContentRating VALUES ('CONT-RATE-COMICS-ALL_AGES', 'Appropriate for all ages', '0');
+INSERT INTO ContentRating VALUES ('CONT-RATE-COMICS-TADVISE', 'Appropriate for most readers, but parents are advised to review', '0');
+INSERT INTO ContentRating VALUES ('CONT-RATE-COMICS-T+AND_UP', 'T+ Teens and Up', '13');
+INSERT INTO ContentRating VALUES ('CONT-RATE-COMICS-PAL', 'Parental Advisory', '15');
+INSERT INTO ContentRating VALUES ('CONT-RATE-COMICS-EX', 'Explicit Content', '18');
+
+/*Insert Data into Media Type Table*/
+INSERT INTO MediaType VALUES('MTYPE-001', 'Article', '0', '0');
+INSERT INTO MediaType VALUES('MTYPE-002', 'Article - Digital', '1', '0');
+INSERT INTO MediaType VALUES('MTYPE-003', 'Newspaper', '0', '0');
+INSERT INTO MediaType VALUES('MTYPE-004', 'Newspaper - Digital', '1', '0');
+INSERT INTO MediaType VALUES('MTYPE-005', 'Magazine', '0', '0');
+INSERT INTO MediaType VALUES('MTYPE-006', 'Magazine - Digital', '1', '0');
+INSERT INTO MediaType VALUES('MTYPE-007', 'Book', '0', '0');
+INSERT INTO MediaType VALUES('MTYPE-008', 'Book - Digital', '1', '0');
+INSERT INTO MediaType VALUES('MTYPE-009', 'Comic Book', '0', '0');
+INSERT INTO MediaType VALUES('MTYPE-010', 'Comic Book - Digital', '1', '0');
+INSERT INTO MediaType VALUES('MTYPE-011', 'AudioBook - CD', '0', '1');
+INSERT INTO MediaType VALUES('MTYPE-012', 'AudioBook - Digital', '1', '1');
+INSERT INTO MediaType VALUES('MTYPE-013', 'DVD', '0', '1');
+INSERT INTO MediaType VALUES('MTYPE-014', 'DVD - Digital', '1', '1');
+INSERT INTO MediaType VALUES('MTYPE-015', 'CD', '0', '1');
+INSERT INTO MediaType VALUES('MTYPE-016', 'CD - Digital', '1', '1');
+INSERT INTO MediaType VALUES('MTYPE-017', 'Cassette', '0', '1');
+
+/*Insert Values into Transaction Type table*/
+INSERT INTO TransactionType VALUES('TTYPE-001','Loan', '0', '0', '0');
+INSERT INTO TransactionType VALUES('TTYPE-002','Purchase', '1', '0', '0');
+INSERT INTO TransactionType VALUES('TTYPE-003','Room Reservation', '0', '0', '1');
+INSERT INTO TransactionType VALUES('TTYPE-004','Tech Reservation', '0', '0', '1');
+INSERT INTO TransactionType VALUES('TTYPE-005','Service', '1', '0', '0');
+INSERT INTO TransactionType VALUES('TTYPE-006','Late Fee', '1', '1', '0');
+INSERT INTO TransactionType VALUES('TTYPE-007','Room Damage Fee', '1', '1', '0');
+INSERT INTO TransactionType VALUES('TTYPE-008','Tech Damage Fee', '1', '1', '0');
+
+/*Insert Data into Loan Type Table*/
+INSERT INTO LoanType VALUES('LOANTYPE-001','Loan - Article', '14', '2', '14', '.20');
+INSERT INTO LoanType VALUES('LOANTYPE-002','Loan - Article - Digital', '14', '1', '14', '.10');
+INSERT INTO LoanType VALUES('LOANTYPE-003','Loan - Newspaper', '14', '1', '14', '.20');
+INSERT INTO LoanType VALUES('LOANTYPE-004','Loan - Newspaper - Digital', '14', '0', '14', '.10');
+INSERT INTO LoanType VALUES('LOANTYPE-005','Loan - Magazine', '7', '0', '14', '.15');
+INSERT INTO LoanType VALUES('LOANTYPE-006','Loan - Magazine - Digital', '7', '0', '14', '.10');
+INSERT INTO LoanType VALUES('LOANTYPE-007','Loan - Book', '30', '3', '30', '.15');
+INSERT INTO LoanType VALUES('LOANTYPE-008','Loan - Book - Digital', '14', '1', '14', '.10');
+INSERT INTO LoanType VALUES('LOANTYPE-009','Loan - Comic Book', '14', '1', '14', '.20');
+INSERT INTO LoanType VALUES('LOANTYPE-010','Loan - Comic Book - Digital', '14', '1', '14', '.20');
+INSERT INTO LoanType VALUES('LOANTYPE-011','Loan - AudioBook - CD', '30', '2', '30', '.20');
+INSERT INTO LoanType VALUES('LOANTYPE-012','Loan - AudioBook - Digital', '14', '1', '14', '.10');
+INSERT INTO LoanType VALUES('LOANTYPE-013','Loan - DVD', '7', '1', '14', '.15');
+INSERT INTO LoanType VALUES('LOANTYPE-014','Loan - DVD - Digital', '7', '0', '14', '.10');
+INSERT INTO LoanType VALUES('LOANTYPE-015','Loan - CD', '7', '0', '14', '.15');
+INSERT INTO LoanType VALUES('LOANTYPE-016','Loan - CD - Digital', '7', '0', '14', '.10');
+INSERT INTO LoanType VALUES('LOANTYPE-017','Loan - Cassette', '7', '1', '14', '.20');
+
+/*Insert Data into Band Table*/
+INSERT INTO Band VALUES('The Strokes');
+INSERT INTO Band VALUES('Queen');
+INSERT INTO Band VALUES('The Rolling Stones');
+INSERT INTO Band VALUES('The Jonas Brothers');
+INSERT INTO Band VALUES('Dixie Chicks');
+INSERT INTO Band VALUES('Backstreet Boys');
+INSERT INTO Band VALUES('NSYNC');
+INSERT INTO Band VALUES('Spice Girls');
+INSERT INTO Band VALUES('Wu-Tang Clan');
+INSERT INTO Band VALUES('Oasis');
+
+/*Insert Data into Tech Type Table*/
+INSERT INTO TechType VALUES('Audio Recorder');
+INSERT INTO TechType VALUES('Tablet');
+INSERT INTO TechType VALUES('Chromebook');
+INSERT INTO TechType VALUES('Laptop Computer');
+INSERT INTO TechType VALUES('Desktop Computer');
+INSERT INTO TechType VALUES('Projector');
+
+/*CREATE ADDITIONAL TABLES*/
+/*Create Creator Table*/
+CREATE TABLE Creator (
+CreatorID BIGINT NOT NULL IDENTITY,
+CreatorFirstName NVARCHAR(70) NOT NULL,
+CreatorLastName NVARCHAR(70) NOT NULL,
+CreatorDOB DATE NOT NULL,
+GenderID NCHAR(7) NOT NULL,
+CountryID NCHAR(8) NOT NULL,
+PRIMARY KEY(CreatorID),
+CONSTRAINT FK_C_GID FOREIGN KEY(GenderID) REFERENCES "Gender"(GenderID),
+CONSTRAINT FK_C_CID FOREIGN KEY(CountryID) REFERENCES "Country"(CountryID),
+);
+
+/*Create User table*/
+CREATE TABLE "User"(
+UserID BIGINT NOT NULL IDENTITY,
+UserPassword NVARCHAR(30) NOT NULL,
+SystemPermissionID NCHAR(14) NOT NULL DEFAULT 'PERMISSION-001',
+UserFirstName NVARCHAR(70) NOT NULL,
+UserLastName NVARCHAR(70) NOT NULL,
+UserDOB DATE NOT NULL,
+UserEmail NVARCHAR(100) NOT NULL,
+UserEmailTwo NVARCHAR(100) NULL,
+UserPhone NCHAR(10) NOT NULL,
+UserPhoneTwo NCHAR(10) NULL,
+UserStreetAddress NVARCHAR(150) NOT NULL,
+UserStreetAddressTwo NVARCHAR(150) NULL,
+UserAptNo NVARCHAR(50) NULL,
+UserCity NVARCHAR(100) NOT NULL,
+StateID NCHAR(5) NOT NULL DEFAULT 'ST-WI',
+UserZipCode INT NOT NULL,
+UserStartDateTime DATETIME NOT NULL,
+UserEndDateTime DATETIME NULL,
+UserIsStaff BIT NOT NULL DEFAULT 0,
+GenderID NCHAR(7) NOT NULL,
+PRIMARY KEY(UserID),
+CONSTRAINT FK_U_SPID FOREIGN KEY(SystemPermissionID) REFERENCES SystemPermission(SystemPermissionID),
+CONSTRAINT FK_U_SID FOREIGN KEY(StateID) REFERENCES "State"(StateID),
+CONSTRAINT FK_U_GID FOREIGN KEY(GenderID) REFERENCES "Gender"(GenderID),
+CHECK (UserZipCode >= 0 AND UserZipCode <= 99999),
+CHECK (UserIsStaff = 0 OR UserIsStaff = 1),
+);
+
+/*Create Schedule table*/
+CREATE TABLE Schedule(
+ScheduleID BIGINT NOT NULL IDENTITY,
+UserID BIGINT NOT NULL,
+ScheduleDate DATE NOT NULL,
+ScheduleStartTime TIME NOT NULL,
+ScheduleEndTime TIME NOT NULL,
+ScheduleOvertimeMinutes SMALLINT NOT NULL DEFAULT 0,
+ScheduleWeekend BIT NOT NULL,
+ScheduleHoliday BIT NOT NULL DEFAULT 0,
+ScheduleHourlyPay SMALLMONEY NOT NULL,
+DepartmentID NCHAR(8) NOT NULL,
+PRIMARY KEY(ScheduleID),
+CONSTRAINT FK_S_UID FOREIGN KEY(UserID) REFERENCES "User"(UserID),
+CONSTRAINT FK_S_DID FOREIGN KEY(DepartmentID) REFERENCES Department(DepartmentID),
+CHECK (ScheduleOvertimeMinutes >= 0 AND ScheduleOvertimeMinutes <= 1440),
+CHECK (ScheduleHourlyPay >= 7.25 AND ScheduleHourlyPay <= 500.00),
+);
+
+/*Create Item Table*/
+CREATE TABLE Item (
+ItemID BIGINT NOT NULL IDENTITY,
+ItemName NVARCHAR (150) NOT NULL,
+PRIMARY KEY(ItemID),
+);
+
+/*Create Media Detail Table*/
+CREATE TABLE MediaDetail (
+MediaDetailID BIGINT NOT NULL IDENTITY,
+ItemID BIGINT NOT NULL,
+MediaTypeID NCHAR(9) NOT NULL,
+MediaDetailISBN NVARCHAR(300) NULL,
+MediaDetailDOI NVARCHAR(300) NULL,
+MediaDetailPublisher NVARCHAR(50) NOT NULL,
+MediaDetailYear SMALLINT NOT NULL,
+MediaDetailGenre NVARCHAR(50) NOT NULL,
+ContentRatingID NVARCHAR(50) NOT NULL,
+MediaPurchaseCost SMALLMONEY NOT NULL,
+PRIMARY KEY(MediaDetailID),
+CONSTRAINT FK_MD_IID FOREIGN KEY(ItemID) REFERENCES Item(ItemID),
+CONSTRAINT FK_MD_MTID FOREIGN KEY(MediaTypeID) REFERENCES MediaType(MediaTypeID),
+CONSTRAINT FK_MD_CRID FOREIGN KEY(ContentRatingID) REFERENCES ContentRating(ContentRatingID),
+);
+
+/*Create Room Detail Table*/
+CREATE TABLE RoomDetail(
+RoomDetailID INT NOT NULL IDENTITY,
+ItemID BIGINT NOT NULL,
+RoomDetailRoomFloor TINYINT NOT NULL,
+RoomDetailRoomNumber TINYINT NOT NULL,
+RoomDetailTotalPhones TINYINT NOT NULL,
+RoomDetailTotalComputers TINYINT NOT NULL,
+RoomDetailTotalTables TINYINT NOT NULL,
+RoomDetailTotalChairs SMALLINT NOT NULL,
+RoomDetailMaxCapacity SMALLINT NOT NULL,
+RoomDetailCostPerMinute SMALLMONEY NOT NULL,
+RoomDetailMaxReservationMinutes SMALLINT NOT NULL,
+PRIMARY KEY(RoomDetailID),
+CONSTRAINT FK_RD_IID FOREIGN KEY(ItemID) REFERENCES Item(ItemID),
+CHECK (RoomDetailRoomFloor >= 0 AND RoomDetailRoomFloor <=3),
+CHECK (RoomDetailRoomNumber >= 0 AND RoomDetailRoomNumber <=900),
+CHECK (RoomDetailTotalPhones >= 0 AND RoomDetailTotalPhones <=15),
+CHECK (RoomDetailTotalComputers >= 0 AND RoomDetailTotalComputers <=50),
+CHECK (RoomDetailTotalTables >= 0 AND RoomDetailTotalTables <=100),
+CHECK (RoomDetailMaxCapacity >= 0 AND RoomDetailMaxCapacity <=2000),
+CHECK (RoomDetailMaxReservationMinutes >= 0 AND RoomDetailMaxReservationMinutes <= 480),
+);
+
+/*Create Tech Detail Table*/
+CREATE TABLE TechDetail(
+TechDetailID BIGINT NOT NULL IDENTITY,
+ItemID BIGINT NOT NULL,
+TechTypeID INT NOT NULL,
+TechDetailBrand NVARCHAR(60) NOT NULL,
+TechDetailTotalHDMIPorts TINYINT NOT NULL,
+TechDetailTotalVGAPorts TINYINT NOT NULL,
+TechDetailTotalDisplayPortPorts TINYINT NOT NULL,
+TechDetailBluetoothEnabled BIT NOT NULL,
+TechDetailWirelessConnection BIT NOT NULL,
+TechDetailPurchaseCost SMALLMONEY NOT NULL,
+TechDetailCostPerMinute SMALLMONEY NOT NULL,
+TechDetailMaxReservationMinutes SMALLINT NOT NULL,
+PRIMARY KEY(TechDetailID),
+CONSTRAINT FK_TD_IID FOREIGN KEY(ItemID) REFERENCES Item(ItemID),
+CONSTRAINT FK_TD_TTID FOREIGN KEY(TechTypeID) REFERENCES TechType(TechTypeID),
+CHECK (TechDetailTotalHDMIPorts >=0 AND TechDetailTotalHDMIPorts <= 30),
+CHECK (TechDetailTotalVGAPorts >=0 AND TechDetailTotalVGAPorts <= 30),
+CHECK (TechDetailTotalDisplayPortPorts >=0 AND TechDetailTotalDisplayPortPorts <= 30),
+CHECK (TechDetailMaxReservationMinutes >= 0 AND TechDetailTotalDisplayPortPorts <= 480),
+);
+
+/*Create Service Detail Table*/
+CREATE TABLE ServiceDetail(
+ServiceDetailID INT NOT NULL IDENTITY,
+ItemID BIGINT NOT NULL,
+ServiceDetailCostPerService SMALLMONEY NOT NULL,
+PRIMARY KEY(ServiceDetailID),
+CONSTRAINT FK_SD_IID FOREIGN KEY(ItemID) REFERENCES Item(ItemID),
+);
+
+/*Create Receipt Table*/
+CREATE TABLE Receipt (
+ReceiptID BIGINT NOT NULL IDENTITY,
+ReceiptDateTime DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ReceiptTotalDue SMALLMONEY NULL,
+UserID BIGINT NOT NULL,
+PRIMARY KEY(ReceiptID),
+CONSTRAINT FK_R_UID FOREIGN KEY(UserID) REFERENCES "User"(UserID),
+);
+
+/*Create Receipt Transaction Table*/
+CREATE TABLE ReceiptTransaction (
+ReceiptTransactionID BIGINT NOT NULL IDENTITY,
+TransactionTypeID NCHAR(9) NOT NULL,
+ItemID BIGINT NOT NULL,
+ReceiptTransactionItemQuantity INT NOT NULL,
+ReceiptTransactionTotalCharge SMALLMONEY NOT NULL,
+ReceiptID BIGINT NOT NULL,
+PRIMARY KEY(ReceiptTransactionID),
+CONSTRAINT FK_RT_TTID FOREIGN KEY(TransactionTypeID) REFERENCES TransactionType(TransactionTypeID),
+CONSTRAINT FK_RT_IID FOREIGN KEY(ItemID) REFERENCES Item(ItemID),
+CONSTRAINT FK_RT_RID FOREIGN KEY(ReceiptID) REFERENCES Receipt(ReceiptID),
+);
+
+/*Create Reservation Detail Table*/
+CREATE TABLE ReservationDetail (
+ReservationDetailID BIGINT NOT NULL IDENTITY,
+ReceiptTransactionID BIGINT NOT NULL,
+ReservationDetailDate DATE NOT NULL,
+ReservationDetailStartTime TIME(7) NOT NULL,
+ReservationDetailEndTime TIME(7) NOT NULL,
+PRIMARY KEY(ReservationDetailID),
+CONSTRAINT FK_RSD_RTID FOREIGN KEY(ReceiptTransactionID) REFERENCES ReceiptTransaction(ReceiptTransactionID),
+);
+
+/*Create Loan Detail Table*/
+CREATE TABLE LoanDetail (
+LoanDetailID BIGINT NOT NULL IDENTITY,
+ReceiptTransactionID BIGINT NOT NULL,
+LoanTypeID NCHAR(12) NOT NULL,
+LoanDetailDueDate DATE NOT NULL,
+LoanDetailItemReturned BIT NOT NULL DEFAULT 0, 
+PRIMARY KEY(LoanDetailID),
+CONSTRAINT FK_LD_LTID FOREIGN KEY(LoanTypeID) REFERENCES LoanType(LoanTypeID),
+CONSTRAINT FK_LD_RTID FOREIGN KEY(ReceiptTransactionID) REFERENCES ReceiptTransaction(ReceiptTransactionID),
+);
+
+/*CREATE LINKING TABLES*/
+/*Create User Alert Table*/
+CREATE TABLE UserAlert (
+UserID BIGINT NOT NULL,
+AlertID INT NOT NULL,
+CONSTRAINT UserAlertIDName PRIMARY KEY(UserID,AlertID),
+CONSTRAINT FK_UA_UID FOREIGN KEY(UserID) REFERENCES "User"(UserID),
+CONSTRAINT FK_UA_AID FOREIGN KEY(AlertID) REFERENCES Alert(AlertID),
+);
+
+/*Create Media Creator Table*/
+CREATE TABLE MediaCreator (
+MediaDetailID BIGINT NOT NULL,
+CreatorID BIGINT NOT NULL,
+CONSTRAINT MediaCreatorIDName PRIMARY KEY(MediaDetailID,CreatorID),
+CONSTRAINT FK_MC_MID FOREIGN KEY(MediaDetailID) REFERENCES MediaDetail(MediaDetailID),
+CONSTRAINT FK_MC_CID FOREIGN KEY(CreatorID) REFERENCES Creator(CreatorID),
+);
+
+/*Create Media Band Table*/
+CREATE TABLE MediaBand (
+MediaDetailID BIGINT NOT NULL,
+BandID BIGINT NOT NULL,
+CONSTRAINT MediaBandIDName PRIMARY KEY(MediaDetailID,BandID),
+CONSTRAINT FK_MB_MID FOREIGN KEY(MediaDetailID) REFERENCES MediaDetail(MediaDetailID),
+CONSTRAINT FK_MB_CID FOREIGN KEY(BandID) REFERENCES Band(BandID),
+);
+/*INSERT DATA INTO ADDITIONAL TABLES*/
+/*Insert Data into Creator Table*/
+INSERT INTO Creator VALUES('Tom', 'Jones','1980-05-01','GEN-002', 'CTRY-USA');
+INSERT INTO Creator VALUES('Nancy', 'Hue','1974-03-24','GEN-001', 'CTRY-USA');
+INSERT INTO Creator VALUES('Joanne', 'Rowling','1965-07-31','GEN-001', 'CTRY-GBR');
+INSERT INTO Creator VALUES('Stephen', 'King','1947-09-21','GEN-002', 'CTRY-USA');
+INSERT INTO Creator VALUES('John', 'Lennon','1940-10-08','GEN-002', 'CTRY-GBR');
+INSERT INTO Creator VALUES('Paul', 'McCartney','1942-06-18','GEN-002', 'CTRY-GBR');
+INSERT INTO Creator VALUES('George', 'Harrison','1943-02-25','GEN-002', 'CTRY-GBR');
+INSERT INTO Creator VALUES('Ringo', 'Star','1940-07-07','GEN-002', 'CTRY-GBR');
+INSERT INTO Creator VALUES('Kevin', 'Jonas','1987-11-05','GEN-002', 'CTRY-USA');
+INSERT INTO Creator VALUES('Joe', 'Jonas','1989-08-15','GEN-002', 'CTRY-USA');
+INSERT INTO Creator VALUES('Nick', 'Jonas','1992-09-16','GEN-002', 'CTRY-USA');
+
+/*Insert Data into User Table*/
+INSERT INTO "User" (UserPassword,UserFirstName,UserLastName,UserDOB,UserEmail,UserPhone,UserStreetAddress,
+	UserCity, UserZipCode, UserStartDateTime, GenderID) VALUES('Password1','Tina','Jones',
+	'1990-01-01','tinajones@gmail.com','9209188020','123 Main St', 'Sheboygan', '53083', CURRENT_TIMESTAMP, 'GEN-001');
+
+INSERT INTO "User" (UserPassword,SystemPermissionID, UserFirstName,UserLastName,UserDOB,UserEmail,UserPhone,UserStreetAddress,
+	UserCity, UserZipCode, UserStartDateTime, UserIsStaff, GenderID) VALUES('Password2','PERMISSION-002', 'George','Andrews',
+	'1976-10-15','georginator@gmail.com','9209170743','100 Georgia Ave', 'Sheboygan Falls', '53085', CURRENT_TIMESTAMP, 1,'GEN-002');
+
+INSERT INTO "User" (UserPassword,SystemPermissionID, UserFirstName,UserLastName,UserDOB,UserEmail,UserPhone,UserStreetAddress,
+	UserCity, UserZipCode, UserStartDateTime, UserIsStaff, GenderID) VALUES('Password2','PERMISSION-003', 'Penelope','Philips',
+	'1964-11-30','pphilips@yahoo.com','4146448452','3004 Highland Ave', 'Sheboygan', '53081', CURRENT_TIMESTAMP, 1,'GEN-001');
+
+INSERT INTO "User" (UserPassword,SystemPermissionID, UserFirstName,UserLastName,UserDOB,UserEmail,UserPhone,UserStreetAddress,
+	UserCity, UserZipCode, UserStartDateTime, UserIsStaff, GenderID) VALUES('Password3','PERMISSION-004', 'Maple','Mertings',
+	'1985-06-03','maplemysterytour@yahoo.com','9209186352','8902 Washington Ave', 'Sheboygan', '53083', CURRENT_TIMESTAMP, 1,'GEN-001');
+
+INSERT INTO "User" (UserPassword, UserFirstName,UserLastName,UserDOB,UserEmail,UserPhone,UserStreetAddress,UserAptNo,
+	UserCity, UserZipCode, UserStartDateTime, GenderID) VALUES('Password4', 'Andrea','Schriber',
+	'1995-04-28','dreascribby@yahoo.com','9209120223','3440 Amazon Dr', '14','Sheboygan', '53083', CURRENT_TIMESTAMP,'GEN-001');
+
+INSERT INTO "User" (UserPassword,UserFirstName,UserLastName,UserDOB,UserEmail,UserPhone,UserStreetAddress,
+	UserCity, UserZipCode, UserStartDateTime, GenderID) VALUES('AmazingTop','Nancy','Zimmer',
+	'1995-12-02','ijustam@gmail.com','9209124444','124 Main St', 'Sheboygan', '53083', CURRENT_TIMESTAMP, 'GEN-001');
+
+INSERT INTO "User" (UserPassword,SystemPermissionID, UserFirstName,UserLastName,UserDOB,UserEmail,UserPhone,UserStreetAddress,
+	UserCity, UserZipCode, UserStartDateTime, UserIsStaff, GenderID) VALUES('pantsyrantsy','PERMISSION-002', 'Alex','Jopher',
+	'1971-08-15','jjalexalex@gmail.com','9209990011','101 Georgia Ave', 'Sheboygan Falls', '53085', CURRENT_TIMESTAMP, 1,'GEN-002');
+
+INSERT INTO "User" (UserPassword,SystemPermissionID, UserFirstName,UserLastName,UserDOB,UserEmail,UserPhone,UserStreetAddress,
+	UserCity, UserZipCode, UserStartDateTime, UserIsStaff, GenderID) VALUES('FridgePodge','PERMISSION-003', 'Sandra','Shipper',
+	'1964-10-03','hippooooo@yahoo.com','4144445220','3005 Highland Ave', 'Sheboygan', '53081', CURRENT_TIMESTAMP, 1,'GEN-001');
+
+INSERT INTO "User" (UserPassword,SystemPermissionID, UserFirstName,UserLastName,UserDOB,UserEmail,UserPhone,UserStreetAddress,
+	UserCity, UserZipCode, UserStartDateTime, UserIsStaff, GenderID) VALUES('De98dhfjgdg','PERMISSION-004', 'Frita','Smith',
+	'1985-02-02','homewardbound@yahoo.com','9206652233','8903 Washington Ave', 'Sheboygan', '53083', CURRENT_TIMESTAMP, 1,'GEN-001');
+
+INSERT INTO "User" (UserPassword, UserFirstName,UserLastName,UserDOB,UserEmail,UserPhone,UserStreetAddress,UserAptNo,
+	UserCity, UserZipCode, UserStartDateTime, GenderID) VALUES('mandamandamanda4', 'Amanda','Moody',
+	'1992-11-28','pumpkinpie@yahoo.com','9209603660','3441 Amazon Dr', '14','Sheboygan', '53083', CURRENT_TIMESTAMP,'GEN-001');
+
+INSERT INTO "User" (UserPassword, UserFirstName,UserLastName,UserDOB,UserEmail,UserPhone,UserStreetAddress,UserAptNo,
+	UserCity, UserZipCode, UserStartDateTime, GenderID) VALUES('fefemama2!', 'Jeff','Schumer',
+	'1990-03-23','bigpastapapa@yahoo.com','9207545445','822 Freeway Rd', '01','Sheboygan', '53081', CURRENT_TIMESTAMP,'GEN-002');
+
+INSERT INTO "User" (UserPassword, UserFirstName,UserLastName,UserDOB,UserEmail,UserPhone,UserStreetAddress,UserAptNo,
+	UserCity, UserZipCode, UserStartDateTime, GenderID) VALUES('wordpassword3', 'Tilly','Schumer',
+	'1990-03-23','dramababy1@yahoo.com','9207545446','822 Freeway Rd', '01','Sheboygan', '53081', CURRENT_TIMESTAMP,'GEN-001');
+
+INSERT INTO "User" (UserPassword, UserFirstName,UserLastName,UserDOB,UserEmail,UserPhone,UserStreetAddress,UserAptNo,
+	UserCity, UserZipCode, UserStartDateTime, GenderID) VALUES('didIask55', 'Anthony','Schumer',
+	'1998-01-13','idgamister@yahoo.com','9202306020','822 Freeway Rd', '01','Sheboygan', '53081', CURRENT_TIMESTAMP,'GEN-002');
+
+INSERT INTO "User" (UserPassword, UserFirstName,UserLastName,UserDOB,UserEmail,UserPhone,UserStreetAddress,UserAptNo,
+	UserCity, UserZipCode, UserStartDateTime, GenderID) VALUES('didIask55', 'Sam','Schumer',
+	'1952-06-13','beerbabes&brewskies@yahoo.com','9206667666','822 Freeway Rd', '01','Sheboygan', '53081', CURRENT_TIMESTAMP,'GEN-002');
+
+/*Insert Data into Schedule Table*/
+INSERT INTO Schedule (UserID, ScheduleDate, ScheduleStartTime, ScheduleEndTime, ScheduleWeekend,
+	ScheduleHourlyPay, DepartmentID) VALUES('2', '2022-10-15', '10:00:00','15:00:00',
+	1, '12.30', 'DEPT-001');
+
+INSERT INTO Schedule (UserID, ScheduleDate, ScheduleStartTime, ScheduleEndTime, ScheduleWeekend,
+	ScheduleHourlyPay, DepartmentID) VALUES('2', '2022-10-16', '10:00:00','15:00:00',
+	1, '12.30', 'DEPT-001');
+
+INSERT INTO Schedule (UserID, ScheduleDate, ScheduleStartTime, ScheduleEndTime, ScheduleWeekend,
+	ScheduleHourlyPay, DepartmentID) VALUES('2', '2022-10-17', '9:30:00','16:30:00',
+	0, '12.30', 'DEPT-001');
+
+INSERT INTO Schedule (UserID, ScheduleDate, ScheduleStartTime, ScheduleEndTime, ScheduleWeekend,
+	ScheduleHourlyPay, DepartmentID) VALUES('2', '2022-10-18', '9:30:00','16:30:00',
+	0, '12.30', 'DEPT-001');
+
+INSERT INTO Schedule (UserID, ScheduleDate, ScheduleStartTime, ScheduleEndTime, ScheduleWeekend,
+	ScheduleHourlyPay, DepartmentID) VALUES('2', '2022-10-19', '9:30:00','16:30:00',
+	0, '12.30', 'DEPT-001');
+
+INSERT INTO Schedule (UserID, ScheduleDate, ScheduleStartTime, ScheduleEndTime, ScheduleWeekend,
+	ScheduleHourlyPay, DepartmentID) VALUES('2', '2022-10-20', '9:30:00','16:30:00',
+	0, '12.30', 'DEPT-001');
+
+INSERT INTO Schedule (UserID, ScheduleDate, ScheduleStartTime, ScheduleEndTime, ScheduleWeekend,
+	ScheduleHourlyPay, DepartmentID) VALUES('2', '2022-10-30', '10:00:00','15:00:00',
+	1, '12.30', 'DEPT-001');
+
+INSERT INTO Schedule (UserID, ScheduleDate, ScheduleStartTime, ScheduleEndTime, ScheduleWeekend,
+	ScheduleHourlyPay, DepartmentID) VALUES('2', '2022-10-31', '9:30:00','16:30:00',
+	0, '12.30', 'DEPT-001');
+
+INSERT INTO Schedule (UserID, ScheduleDate, ScheduleStartTime, ScheduleEndTime, ScheduleWeekend,
+	ScheduleHourlyPay, DepartmentID) VALUES('2', '2022-11-01', '9:30:00','16:30:00',
+	0, '12.30', 'DEPT-001');
+
+INSERT INTO Schedule (UserID, ScheduleDate, ScheduleStartTime, ScheduleEndTime, ScheduleWeekend,
+	ScheduleHourlyPay, DepartmentID) VALUES('2', '2022-11-02', '9:30:00','16:30:00',
+	0, '12.30', 'DEPT-001');
+
+/*Insert Data into Item Table*/
+-- services
+INSERT INTO Item VALUES('Black and White Copy');
+INSERT INTO Item VALUES('Color Copy');
+INSERT INTO Item VALUES('Black and White Print');
+INSERT INTO Item VALUES('Color Print');
+INSERT INTO Item VALUES('Photo Print');
+INSERT INTO Item VALUES('Local Fax');
+INSERT INTO Item VALUES('International Fax');
+INSERT INTO Item VALUES('Local Call');
+INSERT INTO Item VALUES('International Call');
+INSERT INTO Item VALUES('Local Page');
+-- books
+INSERT INTO Item VALUES('Harry Potter and the Prisoner of Azkaban');
+INSERT INTO Item VALUES('Harry Potter and the Chamber of Secrets');
+INSERT INTO Item VALUES('Harry Potter and the Sorcerer''s Stone');
+INSERT INTO Item VALUES('Harry Potter and the Order of the Phoenix');
+INSERT INTO Item VALUES('Harry Potter and the Golblet of Fire');
+INSERT INTO Item VALUES('Harry Potter and the Half Blood Prince');
+INSERT INTO Item VALUES('Harry Potter and the Deathly Hallows');
+INSERT INTO Item VALUES('The Mist');
+INSERT INTO Item VALUES('If it Bleeds');
+INSERT INTO Item VALUES('Fairy Tale');
+-- music
+INSERT INTO Item VALUES('Is This It');
+INSERT INTO Item VALUES('Room on Fire');
+INSERT INTO Item VALUES('First Impressions of Earth');
+INSERT INTO Item VALUES('Angles');
+INSERT INTO Item VALUES('Comedown Machine');
+INSERT INTO Item VALUES('The New Abnormal');
+INSERT INTO Item VALUES('Enter the Wu-Tang');
+INSERT INTO Item VALUES('Wu-Tang Forever');
+INSERT INTO Item VALUES('The W');
+INSERT INTO Item VALUES('Iron Flag');
+INSERT INTO Item VALUES('8 Diagrams');
+-- rooms
+INSERT INTO Item VALUES('ROOM-001F-0001');
+INSERT INTO Item VALUES('ROOM-001F-0002');
+INSERT INTO Item VALUES('ROOM-001F-0003');
+INSERT INTO Item VALUES('ROOM-001F-0004');
+INSERT INTO Item VALUES('ROOM-002F-0001');
+INSERT INTO Item VALUES('ROOM-002F-0002');
+INSERT INTO Item VALUES('ROOM-002F-0003');
+INSERT INTO Item VALUES('ROOM-002F-0004');
+INSERT INTO Item VALUES('ROOM-003F-0001');
+INSERT INTO Item VALUES('ROOM-003F-0002');
+-- tech
+INSERT INTO Item VALUES('Optoma Projector');
+INSERT INTO Item VALUES('Benq Projector');
+INSERT INTO Item VALUES('Sony Projector');
+INSERT INTO Item VALUES('Sony Audio Recorder');
+INSERT INTO Item VALUES('Apple Laptop');
+INSERT INTO Item VALUES('Asus Laptop');
+INSERT INTO Item VALUES('Lenovo Laptop');
+INSERT INTO Item VALUES('Apple Tablet');
+INSERT INTO Item VALUES('Samsung Tablet');
+INSERT INTO Item VALUES('Dell Tablet');
+
+/*Insert Data into Media Detail Table*/
+INSERT INTO MediaDetail VALUES( 11, 'MTYPE-007', '978-0747542155', NULL, 'Bloomsbury', '1999', 'Fantasy', 'CONT-RATE-BOOK-Y', '15.00');
+INSERT INTO MediaDetail VALUES( 12, 'MTYPE-007', '978-0439064873', NULL,'Pottermore Publishing', '2015', 'Fantasy', 'CONT-RATE-BOOK-Y', '15.00');
+INSERT INTO MediaDetail VALUES( 13, 'MTYPE-007', '978-0439708180', NULL,'Pottermore Publishing', '2015', 'Fantasy', 'CONT-RATE-BOOK-Y', '15.00');
+INSERT INTO MediaDetail VALUES( 14, 'MTYPE-007', '978-0439358071', NULL,'Arthur A. Levine Books', '2003', 'Fantasy', 'CONT-RATE-BOOK-Y', '15.00');
+INSERT INTO MediaDetail VALUES( 15, 'MTYPE-007', '978-0439139595', NULL,'Scholastic Press', '2000', 'Fantasy', 'CONT-RATE-BOOK-Y', '15.00');
+INSERT INTO MediaDetail VALUES( 16, 'MTYPE-007', '978-0439784542', NULL,'Arthur A. Levine Books', '2005', 'Fantasy', 'CONT-RATE-BOOK-Y', '15.00');
+INSERT INTO MediaDetail VALUES( 17, 'MTYPE-007', '978-1408855959', NULL,'Arthur A. Levine Books', '2017', 'Fantasy', 'CONT-RATE-BOOK-Y', '15.00');
+INSERT INTO MediaDetail VALUES( 18, 'MTYPE-007', '978-1982103521', NULL,'Stephen King', '2018', 'Horror', 'CONT-RATE-BOOK-T', '10.00');
+INSERT INTO MediaDetail VALUES( 19, 'MTYPE-007', '978-1529391572', NULL,'Stephen King', '2021', 'Horror', 'CONT-RATE-BOOK-T', '10.00');
+INSERT INTO MediaDetail VALUES( 20, 'MTYPE-007', '978-1668002179', NULL,'Stephen King', '2022', 'Horror', 'CONT-RATE-BOOK-T', '10.00');
+INSERT INTO MediaDetail VALUES( 21, 'MTYPE-015', NULL, NULL, 'RCA Records', '2001', 'Rock', 'CONT-RATE-MUSIC-NONPAL', '10.00');
+INSERT INTO MediaDetail VALUES( 22, 'MTYPE-015', NULL, NULL, 'RCA Records', '2003', 'Rock', 'CONT-RATE-MUSIC-NONPAL', '10.00');
+INSERT INTO MediaDetail VALUES( 23, 'MTYPE-015', NULL, NULL, 'RCA Records', '2005', 'Rock', 'CONT-RATE-MUSIC-NONPAL', '10.00');
+INSERT INTO MediaDetail VALUES( 24, 'MTYPE-015', NULL, NULL, 'RCA Records', '2011', 'Rock', 'CONT-RATE-MUSIC-NONPAL', '10.00');
+INSERT INTO MediaDetail VALUES( 25, 'MTYPE-015', NULL, NULL, 'RCA Records', '2013', 'Rock', 'CONT-RATE-MUSIC-NONPAL', '10.00');
+INSERT INTO MediaDetail VALUES( 26, 'MTYPE-015', NULL, NULL, 'RCA Records', '2020', 'Rock', 'CONT-RATE-MUSIC-NONPAL', '10.00');
+INSERT INTO MediaDetail VALUES( 27, 'MTYPE-015', NULL, NULL, 'Loud Records', '1993', 'Rap', 'CONT-RATE-MUSIC-PAL', '15.00');
+INSERT INTO MediaDetail VALUES( 28, 'MTYPE-015', NULL, NULL, 'Loud Records', '1997', 'Rap', 'CONT-RATE-MUSIC-PAL', '15.00');
+INSERT INTO MediaDetail VALUES( 29, 'MTYPE-015', NULL, NULL, 'Columbia Records', '2000', 'Rap', 'CONT-RATE-MUSIC-NONPAL', '15.00');
+INSERT INTO MediaDetail VALUES( 30, 'MTYPE-015', NULL, NULL, 'Columbia Records', '2001', 'Rap', 'CONT-RATE-MUSIC-PAL', '15.00');
+INSERT INTO MediaDetail VALUES( 31, 'MTYPE-015', NULL, NULL, 'SRC', '2007', 'Rap', 'CONT-RATE-MUSIC-PAL', '15.00');
+
+/*Insert Data into Room Detail Table*/
+INSERT INTO RoomDetail VALUES(32, '1', '1', '2', '2', '3', '3', '30', '0.15', '480');
+INSERT INTO RoomDetail VALUES(33, '1', '2', '2', '2', '3', '3', '30', '0.15', '480');
+INSERT INTO RoomDetail VALUES(34, '1', '3', '0', '15', '16', '16', '50', '0.20', '480');
+INSERT INTO RoomDetail VALUES(35, '1', '4', '0', '15', '16', '16', '60', '0.25', '480');
+INSERT INTO RoomDetail VALUES(36, '2', '1', '0', '15', '3', '16', '75', '0.30', '480');
+INSERT INTO RoomDetail VALUES(37, '2', '2', '1', '0', '1', '6', '10', '0.10', '480');
+INSERT INTO RoomDetail VALUES(38, '2', '3', '1', '0', '1', '6', '10', '0.10', '480');
+INSERT INTO RoomDetail VALUES(39, '2', '4', '1', '0', '1', '6', '10', '0.10', '480');
+INSERT INTO RoomDetail VALUES(40, '3', '1', '1', '1', '0', '30', '200', '1.00', '240');
+INSERT INTO RoomDetail VALUES(41, '3', '2', '1', '15', '16', '16', '200', '1.00', '480');
+
+/*Insert Data into Tech Detail Table*/
+INSERT INTO TechDetail VALUES(42, 6, 'Optoma','1', '1', '1', '1', '1','500.00', '0.05', '240');
+INSERT INTO TechDetail VALUES(43, 6, 'Benq','1', '0', '0', '1','1','400.00', '0.05', '240');
+INSERT INTO TechDetail VALUES(44, 6, 'Sony','1', '1', '1', '0','0','550.00', '0.05', '480');
+INSERT INTO TechDetail VALUES(45, 1, 'Sony','0', '0', '0', '1','1','5.00', '0.03', '480');
+INSERT INTO TechDetail VALUES(46, 4, 'Apple','0', '0', '0', '1', '0','1000.00', '0.05', '480');
+INSERT INTO TechDetail VALUES(47, 4, 'Asus','1', '1', '0', '1', '1','600.00', '0.05', '480');
+INSERT INTO TechDetail VALUES(48, 4, 'Lenovo','1', '1', '0', '1', '1','250.00', '0.05', '480');
+INSERT INTO TechDetail VALUES(49, 2, 'Apple','0', '0', '0', '1', '1','500.00', '0.05', '480');
+INSERT INTO TechDetail VALUES(50, 2, 'Samsung','0', '0', '0', '1', '1','300.00', '0.04', '480');
+INSERT INTO TechDetail VALUES(51, 2, 'Dell','0', '0', '0', '1', '1','250.00', '0.04', '480');
+
+/*Insert Data into Service Detail Table*/
+INSERT INTO ServiceDetail VALUES (1, '0.01');
+INSERT INTO ServiceDetail VALUES (2, '0.02');
+INSERT INTO ServiceDetail VALUES (3, '0.01');
+INSERT INTO ServiceDetail VALUES (4, '0.02');
+INSERT INTO ServiceDetail VALUES (5, '0.05');
+INSERT INTO ServiceDetail VALUES (6, '0.00');
+INSERT INTO ServiceDetail VALUES (7, '0.05');
+INSERT INTO ServiceDetail VALUES (8, '0.05');
+INSERT INTO ServiceDetail VALUES (9, '5.00');
+INSERT INTO ServiceDetail VALUES (10, '0.01');
+
+/*Insert Data into Receipt Table*/
+INSERT INTO Receipt VALUES(DEFAULT, '15.00', 1);
+INSERT INTO Receipt VALUES(DEFAULT, '15.00', 1);
+INSERT INTO Receipt VALUES(DEFAULT, '18.00', 1);
+INSERT INTO Receipt VALUES(DEFAULT, '16.80', 4);
+INSERT INTO Receipt VALUES(DEFAULT, '23.40', 4);
+INSERT INTO Receipt VALUES(DEFAULT, '6.00', 6);
+INSERT INTO Receipt VALUES(DEFAULT, '6.00', 7);
+INSERT INTO Receipt VALUES(DEFAULT, '6.00', 8);
+INSERT INTO Receipt VALUES(DEFAULT, '60.00', 9);
+INSERT INTO Receipt VALUES(DEFAULT, '60.00', 10);
+INSERT INTO Receipt VALUES(DEFAULT, '0.00', 12);
+INSERT INTO Receipt VALUES(DEFAULT, '0.00', 13);
+INSERT INTO Receipt VALUES(DEFAULT, '0.00', 2);
+INSERT INTO Receipt VALUES(DEFAULT, '0.00', 3);
+INSERT INTO Receipt VALUES(DEFAULT, '0.00', 4);
+INSERT INTO Receipt VALUES(DEFAULT, '0.11', 5);
+INSERT INTO Receipt VALUES(DEFAULT, '0.60', 6);
+INSERT INTO Receipt VALUES(DEFAULT, '0.05', 7);
+INSERT INTO Receipt VALUES(DEFAULT, '0.32', 8);
+INSERT INTO Receipt VALUES(DEFAULT, '1.00', 9);
+INSERT INTO Receipt VALUES(DEFAULT, '30.00', 10);
+INSERT INTO Receipt VALUES(DEFAULT, '10.00', 11);
+INSERT INTO Receipt VALUES(DEFAULT, '10.00', 12);
+INSERT INTO Receipt VALUES(DEFAULT, '0.30', 14);
+INSERT INTO Receipt VALUES(DEFAULT, '2.25', 3);
+INSERT INTO Receipt VALUES(DEFAULT, '2.10', 8);
+INSERT INTO Receipt VALUES(DEFAULT, '0.30', 7);
+INSERT INTO Receipt VALUES(DEFAULT, '1.50', 6);
+INSERT INTO Receipt VALUES(DEFAULT, '120.00', 1);
+INSERT INTO Receipt VALUES(DEFAULT, '75.00', 4);
+INSERT INTO Receipt VALUES(DEFAULT, '6.50', 1);
+INSERT INTO Receipt VALUES(DEFAULT, '10.00', 1);
+INSERT INTO Receipt VALUES(DEFAULT, '17.00', 4);
+
+/*Insert data into Receipt Transaction Table*/
+-- room reservations
+INSERT INTO ReceiptTransaction VALUES('TTYPE-003', 32, '1', '9.00', 1);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-003', 33, '1', '9.00', 2);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-003', 34, '1', '12.00', 3);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-003', 35, '1', '15.00', 4);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-003', 36, '1', '18.00', 5);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-003', 37, '1', '6.00', 6);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-003', 38, '1', '6.00', 7);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-003', 39, '1', '6.00', 8);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-003', 40, '1', '60.00', 9);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-003', 41, '1', '60.00', 10);
+-- tech reservations
+INSERT INTO ReceiptTransaction VALUES('TTYPE-004', 42, '1', '3.00', 1);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-004', 43, '1', '3.00', 2);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-004', 44, '1', '3.00', 3);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-004', 45, '1', '1.80', 4);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-004', 46, '1', '3.00', 5);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-004', 47, '1', '3.00', 1);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-004', 48, '1', '3.00', 2);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-004', 49, '1', '3.00', 3);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-004', 50, '1', '2.40', 4);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-004', 51, '1', '2.40', 5);
+--book loans
+INSERT INTO ReceiptTransaction VALUES('TTYPE-001', 11, '1', '0.00', 11);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-001', 12, '1', '0.00', 11);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-001', 13, '1', '0.00', 12);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-001', 14, '1', '0.00', 12);
+-- cd loans
+INSERT INTO ReceiptTransaction VALUES('TTYPE-001', 28, '1', '0.00', 11);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-001', 29, '1', '0.00', 13);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-001', 30, '1', '0.00', 14);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-001', 31, '1', '0.00', 15);
+-- services
+INSERT INTO ReceiptTransaction VALUES('TTYPE-005', 1, '11', '0.11', 16);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-005', 2, '30', '0.60', 17);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-005', 3, '5', '0.05', 18);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-005', 4, '16', '0.32', 19);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-005', 5, '20', '1.00', 20);
+-- purchases
+INSERT INTO ReceiptTransaction VALUES('TTYPE-002', 23, '1', '10.00', 21);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-002', 24, '1', '10.00', 21);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-002', 25, '1', '10.00', 21);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-002', 26, '1', '10.00', 22);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-002', 27, '1', '15.00', 23);
+-- late fees
+INSERT INTO ReceiptTransaction VALUES('TTYPE-006', 16, '2', '0.30', 24);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-006', 17, '15', '2.25', 25);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-006', 18, '14', '2.10', 26);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-006', 19, '2', '0.30', 27);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-006', 20, '10', '1.50', 28);
+-- room damage fee
+INSERT INTO ReceiptTransaction VALUES('TTYPE-007', 1, '1', '50.00', 29);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-007', 2, '1', '25.00', 29);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-007', 3, '1', '45.00', 29);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-007', 4, '1', '35.00', 30);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-007', 5, '1', '40.00', 30);
+-- tech damage fee
+INSERT INTO ReceiptTransaction VALUES('TTYPE-008', 42, '1', '4.00', 31);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-008', 43, '1', '2.50', 31);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-008', 44, '1', '10.00', 32);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-008', 45, '1', '12.00', 33);
+INSERT INTO ReceiptTransaction VALUES('TTYPE-008', 46, '1', '5.00', 33);
+
+/*Insert data into Reservation Detail Table*/
+INSERT INTO ReservationDetail VALUES('1', '2022-10-17', '08:30:00','09:30:00');
+INSERT INTO ReservationDetail VALUES('2', '2022-10-18', '08:30:00','09:30:00');
+INSERT INTO ReservationDetail VALUES('3', '2022-10-19', '08:30:00','09:30:00');
+INSERT INTO ReservationDetail VALUES('4', '2022-10-20', '08:30:00','09:30:00');
+INSERT INTO ReservationDetail VALUES('5', '2022-10-21', '08:30:00','09:30:00');
+INSERT INTO ReservationDetail VALUES('6', '2022-10-24', '08:30:00','09:30:00');
+INSERT INTO ReservationDetail VALUES('7', '2022-10-25', '08:30:00','09:30:00');
+INSERT INTO ReservationDetail VALUES('8', '2022-10-26', '08:30:00','09:30:00');
+INSERT INTO ReservationDetail VALUES('9', '2022-10-27', '08:30:00','09:30:00');
+INSERT INTO ReservationDetail VALUES('10', '2022-10-28', '08:30:00','09:30:00');
+INSERT INTO ReservationDetail VALUES('11', '2022-10-17', '08:30:00','09:30:00');
+INSERT INTO ReservationDetail VALUES('12', '2022-10-17', '08:30:00','09:30:00');
+INSERT INTO ReservationDetail VALUES('13', '2022-10-17', '08:30:00','09:30:00');
+INSERT INTO ReservationDetail VALUES('14', '2022-10-17', '08:30:00','09:30:00');
+INSERT INTO ReservationDetail VALUES('15', '2022-10-17', '08:30:00','09:30:00');
+INSERT INTO ReservationDetail VALUES('16', '2022-10-17', '08:30:00','09:30:00');
+INSERT INTO ReservationDetail VALUES('17', '2022-10-17', '08:30:00','09:30:00');
+INSERT INTO ReservationDetail VALUES('18', '2022-10-18', '08:30:00','09:30:00');
+INSERT INTO ReservationDetail VALUES('19', '2022-10-19', '08:30:00','09:30:00');
+INSERT INTO ReservationDetail VALUES('20', '2022-10-20', '08:30:00','09:30:00');
+
+/*INSERT DATA INTO LINKING TABLES*/
+/*Insert Data into User Alert Table*/
+INSERT UserAlert (UserID, AlertID)
+SELECT UserID, AlertID
+FROM "User"
+CROSS JOIN
+Alert
+WHERE UserID = '11' AND AlertID = '1';
+
+INSERT UserAlert (UserID, AlertID)
+SELECT UserID, AlertID
+FROM "User"
+CROSS JOIN
+Alert
+WHERE UserID = '11' AND AlertID = '2';
+
+INSERT UserAlert (UserID, AlertID)
+SELECT UserID, AlertID
+FROM "User"
+CROSS JOIN
+Alert
+WHERE UserID = '11' AND AlertID = '3';
+
+INSERT UserAlert (UserID, AlertID)
+SELECT UserID, AlertID
+FROM "User"
+CROSS JOIN
+Alert
+WHERE UserID = '12' AND AlertID = '4';
+
+INSERT UserAlert (UserID, AlertID)
+SELECT UserID, AlertID
+FROM "User"
+CROSS JOIN
+Alert
+WHERE UserID = '12' AND AlertID = '5';
+
+INSERT UserAlert (UserID, AlertID)
+SELECT UserID, AlertID
+FROM "User"
+CROSS JOIN
+Alert
+WHERE UserID = '13' AND AlertID = '6';
+
+INSERT UserAlert (UserID, AlertID)
+SELECT UserID, AlertID
+FROM "User"
+CROSS JOIN
+Alert
+WHERE UserID = '13' AND AlertID = '7';
+
+INSERT UserAlert (UserID, AlertID)
+SELECT UserID, AlertID
+FROM "User"
+CROSS JOIN
+Alert
+WHERE UserID = '13' AND AlertID = '8';
+
+INSERT UserAlert (UserID, AlertID)
+SELECT UserID, AlertID
+FROM "User"
+CROSS JOIN
+Alert
+WHERE UserID = '14' AND AlertID = '9';
+
+INSERT UserAlert (UserID, AlertID)
+SELECT UserID, AlertID
+FROM "User"
+CROSS JOIN
+Alert
+WHERE UserID = '14' AND AlertID = '10';
+
+/*Insert Data into Media Creator Table*/
+INSERT MediaCreator (MediaDetailID, CreatorID)
+SELECT MediaDetailID, CreatorID
+FROM MediaDetail
+CROSS JOIN
+Creator
+WHERE MediaDetailID = '1' AND CreatorID = '3';
+
+INSERT MediaCreator (MediaDetailID, CreatorID)
+SELECT MediaDetailID, CreatorID
+FROM MediaDetail
+CROSS JOIN
+Creator
+WHERE MediaDetailID = '2' AND CreatorID = '3';
+
+INSERT MediaCreator (MediaDetailID, CreatorID)
+SELECT MediaDetailID, CreatorID
+FROM MediaDetail
+CROSS JOIN
+Creator
+WHERE MediaDetailID = '3' AND CreatorID = '3';
+
+INSERT MediaCreator (MediaDetailID, CreatorID)
+SELECT MediaDetailID, CreatorID
+FROM MediaDetail
+CROSS JOIN
+Creator
+WHERE MediaDetailID = '4' AND CreatorID = '3';
+
+INSERT MediaCreator (MediaDetailID, CreatorID)
+SELECT MediaDetailID, CreatorID
+FROM MediaDetail
+CROSS JOIN
+Creator
+WHERE MediaDetailID = '5' AND CreatorID = '3';
+
+INSERT MediaCreator (MediaDetailID, CreatorID)
+SELECT MediaDetailID, CreatorID
+FROM MediaDetail
+CROSS JOIN
+Creator
+WHERE MediaDetailID = '6' AND CreatorID = '3';
+
+INSERT MediaCreator (MediaDetailID, CreatorID)
+SELECT MediaDetailID, CreatorID
+FROM MediaDetail
+CROSS JOIN
+Creator
+WHERE MediaDetailID = '7' AND CreatorID = '3';
+
+INSERT MediaCreator (MediaDetailID, CreatorID)
+SELECT MediaDetailID, CreatorID
+FROM MediaDetail
+CROSS JOIN
+Creator
+WHERE MediaDetailID = '8' AND CreatorID = '4';
+
+INSERT MediaCreator (MediaDetailID, CreatorID)
+SELECT MediaDetailID, CreatorID
+FROM MediaDetail
+CROSS JOIN
+Creator
+WHERE MediaDetailID = '9' AND CreatorID = '4';
+
+INSERT MediaCreator (MediaDetailID, CreatorID)
+SELECT MediaDetailID, CreatorID
+FROM MediaDetail
+CROSS JOIN
+Creator
+WHERE MediaDetailID = '10' AND CreatorID = '4';
+
+/*Insert Data into Media Band Table*/
+INSERT MediaBand (MediaDetailID, BandID)
+SELECT MediaDetailID, BandID
+FROM MediaDetail
+CROSS JOIN
+Band
+WHERE MediaDetailID = '11' AND BandName = 'The Strokes';
+
+INSERT MediaBand (MediaDetailID, BandID)
+SELECT MediaDetailID, BandID
+FROM MediaDetail
+CROSS JOIN
+Band
+WHERE MediaDetailID = '12' AND BandName = 'The Strokes';
+
+INSERT MediaBand (MediaDetailID, BandID)
+SELECT MediaDetailID, BandID
+FROM MediaDetail
+CROSS JOIN
+Band
+WHERE MediaDetailID = '13' AND BandName = 'The Strokes';
+
+INSERT MediaBand (MediaDetailID, BandID)
+SELECT MediaDetailID, BandID
+FROM MediaDetail
+CROSS JOIN
+Band
+WHERE MediaDetailID = '14' AND BandName = 'The Strokes';
+
+INSERT MediaBand (MediaDetailID, BandID)
+SELECT MediaDetailID, BandID
+FROM MediaDetail
+CROSS JOIN
+Band
+WHERE MediaDetailID = '15' AND BandName = 'The Strokes';
+
+INSERT MediaBand (MediaDetailID, BandID)
+SELECT MediaDetailID, BandID
+FROM MediaDetail
+CROSS JOIN
+Band
+WHERE MediaDetailID = '16' AND BandName = 'The Strokes';
+
+INSERT MediaBand (MediaDetailID, BandID)
+SELECT MediaDetailID, BandID
+FROM MediaDetail
+CROSS JOIN
+Band
+WHERE MediaDetailID = '17' AND BandName = 'Wu-Tang Clan';
+
+INSERT MediaBand (MediaDetailID, BandID)
+SELECT MediaDetailID, BandID
+FROM MediaDetail
+CROSS JOIN
+Band
+WHERE MediaDetailID = '18' AND BandName = 'Wu-Tang Clan';
+
+INSERT MediaBand (MediaDetailID, BandID)
+SELECT MediaDetailID, BandID
+FROM MediaDetail 
+CROSS JOIN
+Band
+WHERE MediaDetailID = '19' AND BandName = 'Wu-Tang Clan';
+
+INSERT MediaBand (MediaDetailID, BandID)
+SELECT MediaDetailID, BandID
+FROM MediaDetail
+CROSS JOIN
+Band
+WHERE MediaDetailID = '20' AND BandName = 'Wu-Tang Clan';
+
+INSERT MediaBand (MediaDetailID, BandID)
+SELECT MediaDetailID, BandID
+FROM MediaDetail
+CROSS JOIN
+Band
+WHERE MediaDetailID = '21' AND BandName = 'Wu-Tang Clan';
